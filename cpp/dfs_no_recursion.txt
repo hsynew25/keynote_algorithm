@@ -1,0 +1,54 @@
+@@추가헤더@@
+
+#include <vector>
+#include <stack>
+#include <algorithm>
+
+
+@@전역변수@@
+
+int dx[4] = { 0,0,-1,1 };
+int dy[4] = { -1,1,0,0 };
+bool check[10][10] = { false, };
+int cnt = 0;
+vector<int> ans;
+
+
+@@코드@@
+	for (int i = 0; i < sizeOfMatrix; i++) {
+		for (int j = 0; j < sizeOfMatrix; j++) {
+			if (matrix[i][j] == 1 && check[i][j]==false) {
+				stack<pair<int, int>> idx;
+				check[i][j] = true;
+				cnt++;
+				idx.push(make_pair(i,j));
+				while (!idx.empty()) {
+					int x= idx.top().first;
+					int y = idx.top().second;
+					bool flag = false;
+					for (int k = 0; k < 4; k++) {
+						int nx = x + dx[k];
+						int ny = y + dy[k];
+						if (nx >= sizeOfMatrix || ny >= sizeOfMatrix || nx < 0 || ny < 0) continue;
+						if (matrix[nx][ny] == 1 && check[nx][ny] == false) {
+							check[nx][ny] = true;
+							idx.push(make_pair(nx, ny));
+							cnt++;
+							flag = true;
+							break;
+						}
+					}
+					if (!flag) {
+						idx.pop();
+					}
+				}
+				ans.push_back(cnt);
+				cnt = 0;
+			}
+		}
+	}
+
+
+@@변수설명@@
+
+sizeOfMatrix : 주어진 행렬 사이즈 (여기선 행과 열의 크기가 같았음)
